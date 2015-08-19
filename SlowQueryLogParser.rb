@@ -273,6 +273,40 @@ class QueryTotal
     puts 
     puts "#{@sql}"
   end
+ 
+ def wrtif
+   #Need to set resdir var
+   File.open(resdir, 'a') { |file| file.puts  spacer} 
+   
+   File.open(resdir, 'a') { |file| file.puts "#{@queries.length} Queries"} 
+   File.open(resdir, 'a') { |file| file.puts "user: #{getUser}"} 
+   File.open(resdir, 'a') { |file| file.puts "url: #{getUrl}"} 
+   File.open(resdir, 'a') { |file| file.puts "ip: #{getIp}"} 
+    if @queries.length < 10 then
+      @queries.sort!{ |a,b| a.getTime <=> b.getTime }
+     File.open(resdir, 'a') { |file| file.print "Taking "}
+      @queries.each do |q|
+        File.open(resdir, 'a') { |file| file.print "#{q.getTime} "}
+    end
+     File.open(resdir, 'a') { |file| file.puts "seconds to complete"} 
+      
+      @queries.sort{ |a,b| a.getLock <=> b.getLock }
+      File.open(resdir, 'a') { |file| file.print "Locking for "}
+      @queries.each do |q|
+        File.open(resdir, 'a') { |file| file.print "#{q.getLock} "}
+      end
+     File.open(resdir, 'a') { |file| file.puts "seconds"} 
+    else
+      File.open(resdir, 'a') { |file| file.puts "Taking #{@min_time} to #{@max_time} seconds to complete"} 
+      File.open(resdir, 'a') { |file| file.puts "Locking for #{@min_lock} to #{@max_lock} seconds"} 
+    end
+    
+    File.open(resdir, 'a') { |file| file.puts "Average time: #{getAverageTime}, Median time #{getMedianTime}"} 
+    File.open(resdir, 'a') { |file| file.puts "Average lock: #{getAverageLock}, Median lock #{getMedianLock}"} 
+
+    File.open(resdir, 'a') { |file| file.puts}  
+    File.open(resdir, 'a') { |file| file.puts "#{@sql}"} 
+  end
    
 end
 
